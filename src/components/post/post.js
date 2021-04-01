@@ -8,15 +8,14 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import NearMeIcon from '@material-ui/icons/NearMe';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-const Post = ({profilePic, message, timestamp, imgName, username}) => {
-    console.log(timestamp)
+const Post = ({profilePic, message, timestamp, image, username}) => {
     return (
         <div className='post'>
             <div className='post_top'>
                 <Avatar src={profilePic} className='post_avatar'/>
                 <div className='post_topInfo'>
                     <h3>{username}</h3>
-                    <p>{new Date(parseInt(timestamp)).toUTCString()}</p>
+                    <p>{new Date(timestamp?.toDate()).toUTCString()}</p>
                     
                 </div> 
             </div>
@@ -25,18 +24,12 @@ const Post = ({profilePic, message, timestamp, imgName, username}) => {
                 <p>{message}</p>
             </div>
 
-            {
-                imgName ? (
-                    <div className='post_image'>
-                        <img src={`http://localhost:9000/retrieve/images/single?name=${imgName}`} alt=''/>
-                    </div>
-                ) : (
-                    console.log('DEBUG >>> no image here')
-                )
-            }
+            
+            <div className='post_image'>
+                <img src={image} alt=''/>
+            </div>
+                
 
-            
-            
             <div className='post_options'>
                         <div className='post_option'>
                             <ThumbUpIcon/>

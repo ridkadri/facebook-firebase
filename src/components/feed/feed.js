@@ -1,55 +1,39 @@
-import React,{useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import StoryReel from '../storyReel/storyReel';
 import MessageSender from '../messageSender/messageSender';
 import Post from '../post/post';
 import './feed.css';
+import db from '../../firebase';
 
-import axios from '../../axios';
-import Pusher from 'pusher-js';
 
-const pusher = new Pusher('f46500a5505adda273fa', {
-    cluster: 'us3'
-});
+function Feed() {
+    const [posts, setPosts] = useState([])
 
-const Feed = () => {
-    const [profilePic, setProfilePic] = useState('');
-    const [postsData, setPostsData] = useState([]);
-
-    const syncFeed = () => {
-        axios.get('/retrieve/posts')
-            .then((res) => {
-                console.log(res.data)
-                setPostsData(res.data)
-        })
-    }
-
-    useEffect(() => {
-        const channel = pusher.subscribe('posts');
-        channel.bind('inserted', function(data) {
-            syncFeed();
-        });
-    }, [])
-
-    useEffect(() => {
-        syncFeed()
-    }, [])
+    useEffect(()=> {
+        db.collection('posts')
+        .orderBy('timestamp','desc')
+        .onSnapshot((snapshot) => (
+            setPosts(snapshot.docs.map((doc) => ({id: doc.id, 
+            data: doc.data()})))
+        ))
+    },[])
 
     return (
         <div className='feed'>
             <StoryReel/>
             <MessageSender/>
 
-            {
-                postsData.map(entry => (
-                    <Post
-                        profilePic={entry.avatar}
-                        message={entry.text}
-                        timestamp={entry.timestamp}
-                        imgName = {entry.imgName}
-                        username={entry.user}
-                    />
-                ))
-            }
+            {posts.map((post) => (
+                <Post
+                    key={post.id}
+                    profilePic={post.data.profilePic}
+                    timestamp={post.data.timestamp}
+                    message={post.data.message}
+                    username={post.data.username}
+                    image={post.data.image}
+                />
+            ))}
+            
         </div>
     )
 }

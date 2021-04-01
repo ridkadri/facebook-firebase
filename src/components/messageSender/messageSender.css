@@ -28,10 +28,6 @@
   background-color: #eff2f5;
 }
 
-.messageSender_fileSelector {
-  width: 20%;
-}
-
 .messageSender_top > form > button {
   display: none;
   height: 0;

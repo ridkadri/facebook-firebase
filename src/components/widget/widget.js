@@ -11,8 +11,7 @@ const Widget = () => {
                 scrolling='no'
                 frameborder='0'
                 allowTransparency='true'
-                allow='encrypted-media'
-            >
+                allow='encrypted-media'>
             </iframe>
         </div>
     )
